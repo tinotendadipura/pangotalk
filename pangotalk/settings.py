@@ -103,8 +103,8 @@ WSGI_APPLICATION = 'pangotalk.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mydb',
-        'USER': 'pango',
+        'NAME': 'pangodb',
+        'USER': 'pangodb',
         'PASSWORD': '@shinobi97',
         'HOST': 'localhost',
         'PORT': '',

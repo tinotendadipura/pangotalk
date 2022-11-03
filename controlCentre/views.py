@@ -85,19 +85,19 @@ def control_center_dashboard(request):
 @login_required(login_url='accounts/login' )
 @allowed_users(allowed_roles = ['Adminstrator'])
 def new_accounts(request):
-    unverified_business = BusinessProfile.objects.filter(account_authorisation_status = False)
-    #verified_business   = BusinessProfile.objects.filter(account_authorisation_status = True).count()
-    suspended_qaccounts = BusinessProfile.objects.filter(account_suspended_status     = True).count()
-    unverified_business_total = BusinessProfile.objects.filter(account_authorisation_status  = False).count()
-    all_upgrades = AccountUpgrade.objects.all().count()
-    context = {
-        'unverified_business':unverified_business, 
-        'unverified_business_total':unverified_business_total,
-        'suspended_qaccounts':suspended_qaccounts,
-        'all_upgrades':all_upgrades,
-       # "verified_business":verified_business,
-    }
-    return render(request,'default/new-accounts.html',context)
+    # unverified_business = BusinessProfile.objects.filter(account_authorisation_status = False)
+    # #verified_business   = BusinessProfile.objects.filter(account_authorisation_status = True).count()
+    # suspended_qaccounts = BusinessProfile.objects.filter(account_suspended_status     = True).count()
+    # unverified_business_total = BusinessProfile.objects.filter(account_authorisation_status  = False).count()
+    # all_upgrades = AccountUpgrade.objects.all().count()
+    # context = {
+    #     'unverified_business':unverified_business, 
+    #     'unverified_business_total':unverified_business_total,
+    #     'suspended_qaccounts':suspended_qaccounts,
+    #     'all_upgrades':all_upgrades,
+    #    # "verified_business":verified_business,
+    # }
+    return render(request,'default/new-accounts.html')
 
 
 

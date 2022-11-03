@@ -537,7 +537,7 @@ def verify_payment(request,refference):
         
        
         emailCounter               = get_emailCounter,
-        Price                      = billingInfo.amount,
+        Price                      = billingInfo.Price,
         first_billing_date         = exp_date,
         second_billing_date        = second_billing_date,
         third_billing_date         = third_billing_date,

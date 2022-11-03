@@ -114,15 +114,23 @@ def ecomm_dashboard(request):
     count_orders  =  Order.objects.filter(Q(business_ID = info.business_ID) & Q(viewed = False)).count()
     customers   = Customer.objects.filter(business_ID = info.business_ID)
     inbox_messages = customers.filter(inbox_messages__gt = 0).count()
-    all_invoice  = BillingInvoice.objects.filter(business_ID = info.business_ID).first()
+    all_invoice  = BillingInvoice.objects.filter(business_ID = info.business_ID)
     # invoice_ID = all_invoice.Invoice_ID
     print(all_invoice)
-    invoice_ID= 'all'
-    ordernotification_status = OrderNotification.objects.filter(business_ID = info.business_ID).first()
-    context = {"all_invoice":all_invoice,"invoice_ID":invoice_ID,"count_orders":count_orders,"businessInfo":businessInfo, "inbox_messages":inbox_messages,"ordernotification_status":ordernotification_status}
-    #send_mail_func.delay()
-    business_ID = info.business_ID
-    return render(request,'app/index.html',context)
+    
+    if all_invoice:
+       invoice_ID=  all_invoice.first()
+       ordernotification_status = OrderNotification.objects.filter(business_ID = info.business_ID).first()
+       context = {"all_invoice":all_invoice,"invoice_ID":invoice_ID,"count_orders":count_orders,"businessInfo":businessInfo, "inbox_messages":inbox_messages,"ordernotification_status":ordernotification_status}
+       #send_mail_func.delay()
+       business_ID = info.business_ID
+       return render(request,'app/index.html',context)
+    else:
+       ordernotification_status = OrderNotification.objects.filter(business_ID = info.business_ID).first()
+       context = {"all_invoice":all_invoice,"None":invoice_ID,"count_orders":count_orders,"businessInfo":businessInfo, "inbox_messages":inbox_messages,"ordernotification_status":ordernotification_status}
+       #send_mail_func.delay()
+       business_ID = info.business_ID
+       return render(request,'app/index.html',context)
 
 
 

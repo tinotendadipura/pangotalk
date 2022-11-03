@@ -85,8 +85,7 @@ def control_center_dashboard(request):
 @login_required(login_url='accounts/login' )
 @allowed_users(allowed_roles = ['Adminstrator'])
 def new_accounts(request):
-    current_user = request.user
-    profile      = UserProfile.objects.get(user = current_user)
+   
     unverified_business_total = BusinessProfile.objects.filter(account_authorisation_status = False).count()
     unverified_business = BusinessProfile.objects.filter(account_authorisation_status = False)
     verified_business   = BusinessProfile.objects.filter(account_authorisation_status = True).count()

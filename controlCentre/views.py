@@ -525,7 +525,7 @@ def verify_payment(request,refference):
         account_suspension_date =  account_suspension_date + exp_date
         billingInfo.update(
         
-        billing_Name               = billingInfo.Plan_Name,
+        billing_Name               = billingInfo.billing_Name,
         emailCounter               = get_emailCounter,
         Price                      = billingInfo.amount,
         first_billing_date         = exp_date,

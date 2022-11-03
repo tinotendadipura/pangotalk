@@ -115,8 +115,9 @@ def ecomm_dashboard(request):
     customers   = Customer.objects.filter(business_ID = info.business_ID)
     inbox_messages = customers.filter(inbox_messages__gt = 0).count()
     all_invoice  = BillingInvoice.objects.filter(business_ID = info.business_ID).first()
-    invoice_ID = all_invoice.Invoice_ID
-    print(invoice_ID)
+    # invoice_ID = all_invoice.Invoice_ID
+    print(all_invoice)
+    invoice_ID= 'all'
     ordernotification_status = OrderNotification.objects.filter(business_ID = info.business_ID).first()
     context = {"all_invoice":all_invoice,"invoice_ID":invoice_ID,"count_orders":count_orders,"businessInfo":businessInfo, "inbox_messages":inbox_messages,"ordernotification_status":ordernotification_status}
     #send_mail_func.delay()

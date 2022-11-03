@@ -70,8 +70,8 @@ def allowed_users(allowed_roles=[]):
 def allowed_account(allowed_account=[]):
     def decorator(view_func):
         def wrapper_func(request, *args, **kwargs):
-
-            user_status = UserProfile.objects.get(user = request.user)
+            user = request.user
+            user_status = UserProfile.objects.get(user = user)
             businessID  = user_status.business_ID
             info        = BusinessProfile.objects.get(business_ID = businessID)
             

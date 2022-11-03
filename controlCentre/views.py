@@ -270,8 +270,7 @@ def new_accounts_profile(request,business_ID):
 @login_required(login_url='accounts/login' )
 @allowed_users(allowed_roles = ['Adminstrator'])
 def active_accounts(request):
-    current_user = request.user
-    profile      = UserProfile.objects.get(user = current_user)
+    
     unverified_business = BusinessProfile.objects.filter(account_authorisation_status = False).count()
     active_business = BusinessProfile.objects.filter(account_authorisation_status = True, )
     all_verified_business = BusinessProfile.objects.filter(account_authorisation_status = True, ).count()
@@ -325,8 +324,7 @@ def account_suspended(request):
 @login_required(login_url='accounts/login' )
 @allowed_users(allowed_roles = ['Adminstrator'])
 def account_configuration(request):
-    current_user = request.user
-    profile      = UserProfile.objects.get(user = current_user)
+    
     config       = BusinessConfiguration.objects.all()
     unverified_business_total = BusinessProfile.objects.filter(account_authorisation_status = False).count()
     unverified_business = BusinessProfile.objects.filter(account_authorisation_status = False)

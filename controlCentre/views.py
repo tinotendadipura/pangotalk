@@ -83,7 +83,7 @@ def control_center_dashboard(request):
 
 
 @login_required(login_url='accounts/login' )
-@allowed_users(allowed_roles = ['Adminstrator'])
+# @allowed_users(allowed_roles = ['Adminstrator'])
 def new_accounts(request):
    
     return render(request,'default/new-accounts.html')

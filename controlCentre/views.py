@@ -179,6 +179,16 @@ def new_accounts_profile(request,business_ID):
                     
 
                 )
+                BillingInvoice.objects.create(
+                    
+                    business_ID      = business_ID,
+                    Business_Name    = businessinfo.BusinessName,
+                    Plan_Name        = billing_plan,
+                    Invoice_ID       = invoice_id ,
+                    payment_method   = 'Cash',
+                    amount           = planInfo.Price,
+                    due_date         = next_billing_date,
+                    ) 
 
 
             if business_data.exists():

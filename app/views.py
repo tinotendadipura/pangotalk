@@ -127,9 +127,9 @@ def ecomm_dashboard(request):
        return render(request,'app/index.html',context)
     else:
        ordernotification_status = OrderNotification.objects.filter(business_ID = info.business_ID).first()
-       context = {"all_invoice":all_invoice,"None":invoice_ID,"count_orders":count_orders,"businessInfo":businessInfo, "inbox_messages":inbox_messages,"ordernotification_status":ordernotification_status}
+       context = {"all_invoice":all_invoice,"count_orders":count_orders,"businessInfo":businessInfo, "inbox_messages":inbox_messages,"ordernotification_status":ordernotification_status}
        #send_mail_func.delay()
-       business_ID = info.business_ID
+       
        return render(request,'app/index.html',context)
 
 

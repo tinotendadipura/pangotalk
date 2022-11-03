@@ -19,11 +19,11 @@ diff-match-patch==20200713
 Django==4.1.3
 django-celery-beat==2.4.0
 django-celery-results==2.4.0
-django-cors-headers==3.13.0
+django-cors-headers==2.2.0
 django-crispy-forms==1.14.0
-django-import-export==3.0.1
+django-import-export==2.0
 django-timezone-field==5.0
-djangorestframework==3.14.0
+djangorestframework==2.0
 et-xmlfile==1.1.0
 future==0.18.2
 html5lib==1.1

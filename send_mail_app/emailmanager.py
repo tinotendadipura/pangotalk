@@ -75,6 +75,7 @@ class PaymentEmail():
 
     def send_billing_reminder(self,business_ID,invoice_id):
             print("it worked")
+
             try:
                 
                 html_tpl_path = 'emails/invoice.html'
@@ -84,7 +85,7 @@ class PaymentEmail():
                 context_data = {'all_invoice':all_invoice,'businessInfo':businessInfo,'current_plan':current_plan}
                 
                 email_html_template = get_template(html_tpl_path).render(context_data)
-                receiver_email = 'tinotendadipura2@gmail.com'
+                receiver_email = businessInfo.email
 
                 mssg = EmailMessage(
                     'OverDue Invoice Billing Reminder',

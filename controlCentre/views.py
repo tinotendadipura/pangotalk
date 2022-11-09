@@ -378,7 +378,8 @@ def payments_dashboard(request):
     datetime_zone  = timezone.now()
     current_month  = datetime_zone.month
     current_year   = datetime_zone.year
-    transaction_history = Transaction.objects.filter(Q(date__year = current_year) and Q(date__month = current_month))
+    transaction_history = Transaction.objects.filter(date__year = current_year)  
+    transaction_history = transaction_history.filter(date__month = current_month)
     proofOfpayment  = ProofOfPayment.objects.filter(verified_status = False)
     totalproofOfpayment  = ProofOfPayment.objects.filter(verified_status = False).count()
     #================================================#

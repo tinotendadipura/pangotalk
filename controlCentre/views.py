@@ -376,8 +376,8 @@ def account_configuration(request):
 @allowed_users(allowed_roles = ['Adminstrator'])
 def payments_dashboard(request):
     datetime_zone  = timezone.now()
-    current_month = datetime_zone.month
-    current_year = datetime_zone.year
+    current_month = str(datetime_zone.month)
+    current_year = str(datetime_zone.year)
     transaction_history = Transaction.objects.filter(Q(date__year__iexact = current_year) and Q(date__month__iexact = current_month))
     proofOfpayment  = ProofOfPayment.objects.filter(verified_status = False)
     totalproofOfpayment  = ProofOfPayment.objects.filter(verified_status = False).count()

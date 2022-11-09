@@ -3,22 +3,16 @@
 {% load inlinecss %}
 
 <!-- External CSS libraries -->
-    <link type="text/css" rel="stylesheet" href="{% inlinecss './invoice/assets/css/bootstrap.min.css'%}">
-    <link type="text/css" rel="stylesheet" href="{% inlinecss './invoice/assets/fonts/font-awesome/css/font-awesome.min.css'%}">
+    {% inlinecss './invoice/assets/css/bootstrap.min.css'%}
+    {% inlinecss './invoice/assets/fonts/font-awesome/css/font-awesome.min.css'%}
 
-    <!-- Favicon icon -->
-    <link rel="shortcut icon" href="assets/img/favicon.ico" type="image/x-icon" >
-
-    <!-- Google fonts -->
-    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
-
+    
     <!-- Custom Stylesheet -->
-    <link type="text/css" rel="stylesheet" href="{% inlinecss './invoice/assets/css/style.css'%}">
-	<script src="{% inlinecss './invoice/assets/js/jquery.min.js'%}"></script>
-<script src="{% inlinecss './invoice/assets/js/jspdf.min.js'%}"></script>
-<script src="{% inlinecss './invoice/assets/js/html2canvas.js'%}"></script>
-<script src="{% inlinecss './invoice/assets/js/app.js'%}"></script>
+    {% inlinecss './invoice/assets/css/style.css'%}
+	{% inlinecss './invoice/assets/js/jquery.min.js'%}
+    {% inlinecss './invoice/assets/js/jspdf.min.js'%}   
+    {% inlinecss './invoice/assets/js/html2canvas.js'%}
+    {% inlinecss './invoice/assets/js/app.js'%}
 	
 <html lang="zxx">
 

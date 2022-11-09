@@ -198,7 +198,6 @@ EMAIL_PORT     = '465'
 AWS_ACCESS_KEY_ID = 'AKIA4S6RBKLVOTF5JZ77'
 AWS_SECRET_ACCESS_KEY = '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'
 AWS_DEFAULT_ACL = None
-DEFAULT_FROM_EMAIL   = 'PangoTalk<taita.edu@gmail.com>'
 
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # EMAIL_HOST    = 'smtp.gmail.com'

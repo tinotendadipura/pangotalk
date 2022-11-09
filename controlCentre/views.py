@@ -392,8 +392,7 @@ def payments_dashboard(request):
     
     #================================================#
     overdue_balance = BillingInvoice.objects.filter(due_date__lte = datetime_zone)
-    current_month = datetime_zone.month
-    current_year = datetime_zone.year
+    
     revenue_balance = Transaction.objects.filter(Q(date__year__iexact = current_year) and Q(date__month__iexact = current_month))
     amount_topay = 0
     total_revenue = 0

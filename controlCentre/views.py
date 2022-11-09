@@ -179,16 +179,7 @@ def new_accounts_profile(request,business_ID):
                     
 
                 )
-                BillingInvoice.objects.create(
-                    
-                    business_ID      = business_ID,
-                    Business_Name    = businessinfo.BusinessName,
-                    Plan_Name        = billing_plan,
-                    Invoice_ID       = invoice_id ,
-                    payment_method   = 'Cash',
-                    amount           = planInfo.Price,
-                    due_date         = next_billing_date,
-                    ) 
+                
 
 
             if business_data.exists():
@@ -403,14 +394,14 @@ def payments_dashboard(request):
     overdue_balance = BillingInvoice.objects.filter(due_date__lte = datetime_zone)
     current_month = datetime_zone.month
     current_year = datetime_zone.year
-    revenue_balance = BillingInvoice.objects.filter(date__year__iexact = current_year,date__month__iexact = current_month)
+    revenue_balance = Transaction.objects.filter(date__year__iexact = current_year,date__month__iexact = current_month)
     amount_topay = 0
     total_revenue = 0
     for revenue in revenue_balance:
         finalrevenue = revenue.amount
         finalrevenue = float(finalrevenue)
         total_revenue = total_revenue + finalrevenue
-
+  
     for total_amount in overdue_balance:
         finalBalance = total_amount.amount
         finalBalance = float(finalBalance)
@@ -519,6 +510,7 @@ def verify_payment(request,refference):
         next_billing_date = exp_date,
     )
     billingInfo = BillingManager.objects.filter(business_ID  = info_proof.business_ID)
+   
 
     if billingInfo.exists():
         billingmanagerInfo = BillingManager.objects.get(business_ID  = info_proof.business_ID)
@@ -535,9 +527,9 @@ def verify_payment(request,refference):
         account_suspension_date =  account_suspension_date + exp_date
         billingInfo.update(
         
-       
+        
         emailCounter               = get_emailCounter,
-        Price                      = billingInfo.Price,
+        Price                      = billingmanagerInfo.Price,
         first_billing_date         = exp_date,
         second_billing_date        = second_billing_date,
         third_billing_date         = third_billing_date,
@@ -554,6 +546,7 @@ def verify_payment(request,refference):
 @allowed_users(allowed_roles = ['Adminstrator'])
 def overdue_payments(request):
     datetime_zone  = timezone.now()
+    print(datetime_zone)
     all_overdue = BillingInvoice.objects.filter(due_date__lte = datetime_zone)
      
     unverified_business_total = BusinessProfile.objects.filter(account_authorisation_status = False).count()

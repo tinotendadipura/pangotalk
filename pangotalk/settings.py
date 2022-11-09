@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'django_celery_beat',
     'send_mail_app',
     'billing',
+     'django_ses',
     
 ]
 
@@ -92,24 +93,24 @@ WSGI_APPLICATION = 'pangotalk.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
-
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'pangodb',
-#         'USER': 'pangodb',
-#         'PASSWORD': '@shinobi97',
-#         'HOST': 'localhost',
-#         'PORT': '',
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #     }
 # }
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'pangotalkdb',
+        'USER': 'dbmanager',
+        'PASSWORD': '@shinobi97',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -148,20 +149,29 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 
+#  Production
 
+# STATIC_URL = '/static/'
+# STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT=os.path.join(BASE_DIR, 'media')
+
+
+# DEVELOPMENT
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, "static/")
-
 MEDIA_URL = '/media/'
 MEDIA_ROOT=os.path.join(BASE_DIR, 'media')
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
 
-
+)
 
 
 # CELERY SETTINGS
 
-CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
@@ -182,15 +192,23 @@ CRISPY_TEMPLATE_PACK='bootstrap4'
 
    
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST    = 'smtp.gmail.com'
-EMAIL_PORT     = '587'
-EMAIL_HOST_USER  = 'taita.edu@gmail.com'
-EMAIL_HOST_PASSWORD  = 'ulzoeaxlyboudqnm'
-APPLICATION_EMAIL    = 'PangoTalk<taita.edu@gmail.com>'
+EMAIL_BACKEND = 'django_ses.SESBackend'
+EMAIL_HOST = 'email-smtp.us-east-1.amazonaws.com'
+EMAIL_PORT     = '465'
+AWS_ACCESS_KEY_ID = 'AKIA4S6RBKLVOTF5JZ77'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_DEFAULT_ACL = None
 DEFAULT_FROM_EMAIL   = 'PangoTalk<taita.edu@gmail.com>'
-EMAIL_USE_TLS  = True
-EMAIL_USE_SSL   = False
+
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST    = 'smtp.gmail.com'
+# EMAIL_PORT     = '587'
+# EMAIL_HOST_USER  = 'taita.edu@gmail.com'
+# EMAIL_HOST_PASSWORD  = 'ulzoeaxlyboudqnm'
+# APPLICATION_EMAIL    = 'PangoTalk<taita.edu@gmail.com>'
+# DEFAULT_FROM_EMAIL   = 'PangoTalk<taita.edu@gmail.com>'
+# EMAIL_USE_TLS  = True
+# EMAIL_USE_SSL   = False
     
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 

@@ -53,7 +53,15 @@ PangoTalk | Add Category
 					
 					{% for customer in customers %}
 					<li class="rv"> 
-					<button onclick="location.href='{% url 'manage/customer/account/feedback' customer.customer_ID %}'" class="flex items-center fg oq vc rounded
+					<button onclick="
+					
+					{% if customer %}
+					location.href='{% url 'manage/customer/account/feedback' customer.customer_ID %}'
+					{% else %}
+					#
+					{% endif %}
+					
+					" class="flex items-center fg oq vc rounded
 					{% if customer.customer_ID == current_customer.customer_ID %}
 					pi
 					{% else %}

@@ -685,6 +685,9 @@
                                  
 								 {% if businessInfo.account_suspended_status == True %}
 								 
+								 {% if all_invoice.invoice_status == 'PAID'  %}
+								 
+								 {% else %}
 								 <!-- Announcement -->
                                     <div class="nz">
                                         <!-- Start -->
@@ -750,7 +753,9 @@
                                         </div>
                                         <!-- End -->
                                     </div>
-                                  <script>
+                                 
+                                   {% endif %}
+								 <script>
  
 								 
 								 $('#announcement-modal-2').modal({

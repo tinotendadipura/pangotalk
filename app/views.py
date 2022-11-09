@@ -84,7 +84,7 @@ from . decorators import (
 
 import uuid
 
-from tablib import Dataset
+
 plan_Id = uuid.uuid1()
 customer_Id = str(plan_Id)
 
@@ -108,29 +108,24 @@ def home(request):
 @allowed_users(allowed_roles = ['Farmer'])
 @allowed_account(allowed_account = ['RETAIL AND ECOMM'])
 def ecomm_dashboard(request):
-    currentUser = request.user
-    info        = UserProfile.objects.get(user = currentUser)
-    businessInfo = BusinessProfile.objects.get(business_ID = info.business_ID)
-    count_orders  =  Order.objects.filter(Q(business_ID = info.business_ID) & Q(viewed = False)).count()
-    customers   = Customer.objects.filter(business_ID = info.business_ID)
-    inbox_messages = customers.filter(inbox_messages__gt = 0).count()
-    all_invoice  = BillingInvoice.objects.filter(business_ID = info.business_ID)
-    # invoice_ID = all_invoice.Invoice_ID
-    print(all_invoice)
+    currentUser         = request.user
+    profile      = UserProfile.objects.get(user = currentUser )
+    businessInfo = BusinessProfile.objects.get(business_ID = profile.business_ID)
+
+    info                = UserProfile.objects.get(user = currentUser)
+    businessInfo        = BusinessProfile.objects.get(business_ID = info.business_ID)
+    count_orders        = Order.objects.filter(Q(business_ID = info.business_ID) & Q(viewed = False)).count()
+    customers           = Customer.objects.filter(business_ID = info.business_ID)
+    inbox_messages      = customers.filter(inbox_messages__gt = 0).count()
+    invoice_info        = BillingInvoice.objects.filter(business_ID = profile.business_ID)
+    all_invoice         = BillingInvoice.objects.filter(business_ID = profile.business_ID).first()
+    invoice_ID          = info.business_ID
     
-    if all_invoice:
-       invoice_ID=  all_invoice.first()
-       ordernotification_status = OrderNotification.objects.filter(business_ID = info.business_ID).first()
-       context = {"all_invoice":all_invoice,"invoice_ID":invoice_ID,"count_orders":count_orders,"businessInfo":businessInfo, "inbox_messages":inbox_messages,"ordernotification_status":ordernotification_status}
-       #send_mail_func.delay()
-       business_ID = info.business_ID
-       return render(request,'app/index.html',context)
-    else:
-       ordernotification_status = OrderNotification.objects.filter(business_ID = info.business_ID).first()
-       context = {"all_invoice":all_invoice,"count_orders":count_orders,"businessInfo":businessInfo, "inbox_messages":inbox_messages,"ordernotification_status":ordernotification_status}
-       #send_mail_func.delay()
-       
-       return render(request,'app/index.html',context)
+    ordernotification_status = OrderNotification.objects.filter(business_ID = info.business_ID).first()
+    context = {"all_invoice":all_invoice,"invoice_ID":invoice_ID,"count_orders":count_orders,"businessInfo":businessInfo, "inbox_messages":inbox_messages,"ordernotification_status":ordernotification_status}
+    #send_mail_func.delay()
+    business_ID = info.business_ID
+    return render(request,'app/index.html',context)
 
 
 
@@ -182,10 +177,14 @@ def ecomm_layer(request):
 @login_required(login_url='accounts/login' )
 @allowed_users(allowed_roles = ['Farmer'])
 def addUser(request):
-    currentUser = request.user
-    info        = UserProfile.objects.get(user = currentUser)
-    businessInfo = BusinessProfile.objects.get(business_ID = info.business_ID)
-    customers   = Customer.objects.filter(business_ID = info.business_ID)
+    currentUser    = request.user
+    info           = UserProfile.objects.get(user = currentUser)
+    all_invoice    = BillingInvoice.objects.filter(business_ID = info.business_ID).first()
+    invoice_ID     = all_invoice.Invoice_ID
+
+    
+    businessInfo   = BusinessProfile.objects.get(business_ID = info.business_ID)
+    customers      = Customer.objects.filter(business_ID = info.business_ID)
     inbox_messages = customers.filter(inbox_messages__gt = 0).count()
     if request.method == "POST":
         # imagePreview       = request.FILES['imagePreview']
@@ -230,7 +229,7 @@ def addUser(request):
             user_invite.invite_email(invite_ID   = inviteID,request = request)
             return redirect('accounts/all-users')
             
-    context ={"businessInfo":businessInfo,"inbox_messages":inbox_messages,}    
+    context ={"invoice_ID":invoice_ID,"businessInfo":businessInfo,"inbox_messages":inbox_messages,}    
     return render(request,'app/add-user.html',context)
 
 
@@ -304,8 +303,14 @@ def inviteForm(request,invite_ID):
 @login_required(login_url='accounts/login' )
 @allowed_users(allowed_roles = ['Farmer'])
 def allUser(request):
-    currentUser = request.user
-    info        = UserProfile.objects.get(user = currentUser)
+    currentUser    = request.user
+    info           = UserProfile.objects.get(user = currentUser)
+    invoice_ID     = info.business_ID
+    all_invoice    = BillingInvoice.objects.filter(business_ID = info.business_ID).first()
+    
+
+
+    
     businessInfo = BusinessProfile.objects.get(business_ID = info.business_ID)
     customers   = Customer.objects.filter(business_ID = info.business_ID)
     inbox_messages = customers.filter(inbox_messages__gt = 0).count()
@@ -315,7 +320,8 @@ def allUser(request):
     context     = { "businessInfo":businessInfo,
                    "inbox_messages":inbox_messages,
                    "all_invite":all_invite,
-                    "total_invite":total_invite}
+                    "total_invite":total_invite,
+                    "invoice_ID":invoice_ID}
     return render(request,'app/all-agents.html',context)
 
 
@@ -330,9 +336,11 @@ def allUser(request):
 def addProduct(request):
     currentUser = request.user
     info        = UserProfile.objects.get(user = currentUser)
+    invoice_ID  = info.business_ID
     businessInfo = BusinessProfile.objects.get(business_ID = info.business_ID)
     customers   = Customer.objects.filter(business_ID = info.business_ID)
     inbox_messages = customers.filter(inbox_messages__gt = 0).count()
+    business_ID = info.business_ID
     
     if request.method == "POST":
        
@@ -371,7 +379,7 @@ def addProduct(request):
         messages.success(request, 'You Have Succesifully Added Product!')
         return redirect('catalog/all-products')
     all_category = ProductCategory.objects.filter(business_ID = info.business_ID,)
-    context = {"businessInfo":businessInfo,'all_category':all_category,"inbox_messages":inbox_messages,}
+    context = {"invoice_ID":invoice_ID,"businessInfo":businessInfo,'all_category':all_category,"inbox_messages":inbox_messages,}
     return render(request,'app/add-product.html',context)
 
 
@@ -382,13 +390,14 @@ def addProduct(request):
 def allProduct(request):
     currentUser    = request.user
     info           = UserProfile.objects.get(user = currentUser)
+    invoice_ID  = info.business_ID
     businessInfo = BusinessProfile.objects.get(business_ID = info.business_ID)
     all_products   = ProductListing.objects.filter(business_ID = info.business_ID)
     customers      = Customer.objects.filter(business_ID = info.business_ID)
     inbox_messages = customers.filter(inbox_messages__gt = 0).count()
     
     total_products = all_products.count()
-    context        = {"businessInfo":businessInfo,"all_products":all_products,"total_products":total_products,"inbox_messages":inbox_messages,}
+    context        = {"invoice_ID":invoice_ID,"businessInfo":businessInfo,"all_products":all_products,"total_products":total_products,"inbox_messages":inbox_messages,}
     return render(request,'app/all-products.html',context)
 
 @login_required(login_url='accounts/login' )
@@ -406,6 +415,7 @@ def deleteproduct(request,product_ID):
 def addCategory(request):
     currentUser  = request.user
     info         = UserProfile.objects.get(user = currentUser)
+    invoice_ID  = info.business_ID
     businessInfo = BusinessProfile.objects.get(business_ID = info.business_ID)
     all_category = ProductCategory.objects.filter(business_ID = info.business_ID,)
     customers   = Customer.objects.filter(business_ID = info.business_ID)
@@ -420,7 +430,7 @@ def addCategory(request):
          category   = category.title(),
          description = description,
         )
-    context = {"businessInfo":businessInfo,'all_category':all_category,"inbox_messages":inbox_messages,}
+    context = {"invoice_ID":invoice_ID,"businessInfo":businessInfo,'all_category':all_category,"inbox_messages":inbox_messages,}
     return render(request,'app/add-category.html',context)
 
 
@@ -434,13 +444,14 @@ def addCategory(request):
 def all_customers(request):
     currentUser = request.user
     info = UserProfile.objects.get(user = currentUser)
+    invoice_ID  = info.business_ID
     businessInfo = BusinessProfile.objects.get(business_ID = info.business_ID)
     all_products = ProductListing.objects.filter(business_ID = info.business_ID)
     all_customers = Customer.objects.filter(business_ID = info.business_ID)
     total_customers = Customer.objects.filter(business_ID = info.business_ID).count()
     customers   = Customer.objects.filter(business_ID = info.business_ID)
     inbox_messages = customers.filter(inbox_messages__gt = 0).count()
-    context = {"businessInfo":businessInfo,'all_customers':all_customers,"inbox_messages":inbox_messages,'total_customers':total_customers}
+    context = {"invoice_ID":invoice_ID,"businessInfo":businessInfo,'all_customers':all_customers,"inbox_messages":inbox_messages,'total_customers':total_customers}
     return render(request,'app/all-customers.html',context)
 
 
@@ -452,6 +463,7 @@ def all_customers(request):
 def add_customers(request):
     currentUser = request.user
     info        = UserProfile.objects.get(user = currentUser)
+    invoice_ID  = info.business_ID
     businessInfo = BusinessProfile.objects.get(business_ID = info.business_ID)
     customers   = Customer.objects.filter(business_ID = info.business_ID)
     inbox_messages = customers.filter(inbox_messages__gt = 0).count()
@@ -483,7 +495,7 @@ def add_customers(request):
                     )
                 messages.success(request, 'Customer has been successifully created.')
                 return redirect('manage/all-customer')
-    context = {"businessInfo":businessInfo,"inbox_messages":inbox_messages,}
+    context = {"invoice_ID":invoice_ID,"businessInfo":businessInfo,"inbox_messages":inbox_messages,}
     return render(request,'app/add-customer.html',context)
 
 
@@ -496,6 +508,7 @@ def add_customers(request):
 def orders(request):
     currentUser    = request.user
     info           = UserProfile.objects.get(user = currentUser)
+    invoice_ID  = info.business_ID
     Order.objects.filter(business_ID = info.business_ID).update(viewed = True)
     totalOrders    = OrderGroup.objects.filter(business_ID = info.business_ID).count()
     
@@ -503,7 +516,7 @@ def orders(request):
     all_orders     = OrderGroup.objects.filter(business_ID = info.business_ID)
     customers      = Customer.objects.filter(business_ID = info.business_ID)
     inbox_messages = customers.filter(inbox_messages__gt = 0).count()
-    context        = {"totalOrders":totalOrders,"businessInfo":businessInfo,'all_orders':all_orders,"inbox_messages":inbox_messages,}
+    context        = {"invoice_ID":invoice_ID,"totalOrders":totalOrders,"businessInfo":businessInfo,'all_orders':all_orders,"inbox_messages":inbox_messages,}
     return render(request,'app/orders.html',context)
 
 
@@ -517,6 +530,7 @@ def orders(request):
 def customer_feedback(request):
     currentUser    = request.user
     info              = UserProfile.objects.get(user = currentUser)
+    invoice_ID  = info.business_ID
     totalOrders       = OrderGroup.objects.filter(business_ID = info.business_ID).count()
     businessInfo      = BusinessProfile.objects.get(business_ID = info.business_ID)
     customers         = Customer.objects.filter(business_ID     = info.business_ID)
@@ -524,7 +538,7 @@ def customer_feedback(request):
     all_feedback      = Feedback.objects.filter(customer_ID     = info.userprofileID)
     total_feedback    = FeedbackCount.objects.filter(business_ID = info.business_ID).first()
     inbox_messages    = customers.filter(inbox_messages__gt = 0).count()
-    context           = {"total_feedback":total_feedback,"current_customer":current_customer,"customers":customers,"totalOrders":totalOrders,"businessInfo":businessInfo,'all_feedback':all_feedback,"inbox_messages":inbox_messages,}
+    context           = {"invoice_ID":invoice_ID,"total_feedback":total_feedback,"current_customer":current_customer,"customers":customers,"totalOrders":totalOrders,"businessInfo":businessInfo,'all_feedback':all_feedback,"inbox_messages":inbox_messages,}
     return render(request,'app/customerfeedback.html',context)
 
 
@@ -536,6 +550,7 @@ def customer_feedback(request):
 def customer_feedback_details(request,customer_ID):
     currentUser    = request.user
     info           = UserProfile.objects.get(user = currentUser)
+    invoice_ID  = info.business_ID
     totalOrders    = OrderGroup.objects.filter(business_ID = info.business_ID).count()
     
     businessInfo   = BusinessProfile.objects.get(business_ID = info.business_ID)
@@ -543,7 +558,7 @@ def customer_feedback_details(request,customer_ID):
     customers      = Customer.objects.filter(business_ID = info.business_ID)
     current_customer  = Customer.objects.get(customer_ID = customer_ID)
     inbox_messages = customers.filter(inbox_messages__gt = 0).count()
-    context        = {"current_customer":current_customer,"customers":customers,"totalOrders":totalOrders,"businessInfo":businessInfo,'all_feedback':all_feedback,"inbox_messages":inbox_messages,}
+    context        = {"invoice_ID":invoice_ID,"current_customer":current_customer,"customers":customers,"totalOrders":totalOrders,"businessInfo":businessInfo,'all_feedback':all_feedback,"inbox_messages":inbox_messages,}
     return render(request,'app/customerfeedback-detail.html',context)
 
 
@@ -555,6 +570,7 @@ def customer_feedback_details(request,customer_ID):
 def order_details(request,customer_number):
     currentUser    = request.user
     info           = UserProfile.objects.get(user = currentUser)
+    invoice_ID  = info.business_ID
     Order.objects.filter(business_ID = info.business_ID).update(viewed = True)
     customer_orders = Order.objects.filter(Q(business_ID = info.business_ID) and Q(customer_ID = customer_number))
     businessInfo   = BusinessProfile.objects.get(business_ID = info.business_ID)
@@ -607,7 +623,7 @@ def order_details(request,customer_number):
             messages.success(request, 'You have successifully updated customer order!')
             return redirect('customer/product/orders',customer_number)
 
-    context        = {"current_customer":current_customer,"all_order_balance":all_order_balance,"customer_orders":customer_orders,"businessInfo":businessInfo,'all_orders':all_orders,"inbox_messages":inbox_messages,}
+    context        = {"invoice_ID":invoice_ID,"current_customer":current_customer,"all_order_balance":all_order_balance,"customer_orders":customer_orders,"businessInfo":businessInfo,'all_orders':all_orders,"inbox_messages":inbox_messages,}
     return render(request,'app/cart.html',context)
 
 
@@ -644,6 +660,7 @@ def deleteOrder(request,OrderID):
 def publishEvent(request):
     currentUser = request.user
     info        = UserProfile.objects.get(user = currentUser)
+    invoice_ID  = info.business_ID
     customers   = Customer.objects.filter(business_ID = info.business_ID)
     inbox_messages = customers.filter(inbox_messages__gt = 0).count()
     businessInfo = BusinessProfile.objects.get(business_ID = info.business_ID)
@@ -713,7 +730,7 @@ def publishEvent(request):
             messages.success(request, 'You have successifully published an event.!')    
         except Exception as exp:
             print(exp)
-    context = {"businessInfo":businessInfo,"inbox_messages":inbox_messages,}
+    context = {"invoice_ID":invoice_ID,"businessInfo":businessInfo,"inbox_messages":inbox_messages,}
     return render(request,'app/add-event.html',context)
 
 
@@ -725,11 +742,13 @@ def publishEvent(request):
 def editEvent(request,EventID):
     currentUser = request.user
     info        = UserProfile.objects.get(user = currentUser)
+    invoice_ID  = info.business_ID
     customers   = Customer.objects.filter(business_ID = info.business_ID)
     inbox_messages = customers.filter(inbox_messages__gt = 0).count()
     eventInfo = Event.objects.get(event_ID =EventID)
     businessInfo = BusinessProfile.objects.get(business_ID = info.business_ID)
     context = {
+        "invoice_ID":invoice_ID,
         "businessInfo":businessInfo,
         "inbox_messages":inbox_messages,
         'eventInfo':eventInfo
@@ -822,6 +841,7 @@ def deleteEvent(request,EventID):
 def allEvents(request):
     currentUser = request.user
     info      =  UserProfile.objects.get(user = currentUser)
+    invoice_ID  = info.business_ID
     all_events =  Event.objects.filter(business_ID = info.business_ID)
     total_events = all_events.count()
     customers   = Customer.objects.filter(business_ID = info.business_ID)
@@ -829,6 +849,7 @@ def allEvents(request):
     current_time  = datetime.datetime.now()
     businessInfo = BusinessProfile.objects.get(business_ID = info.business_ID)
     context    = {
+        "invoice_ID":invoice_ID,
         "businessInfo":businessInfo,
         "current_time":current_time,
         "inbox_messages":inbox_messages,
@@ -842,6 +863,7 @@ def allEvents(request):
 def eventsBookings(request):
     currentUser = request.user
     info        =  UserProfile.objects.get(user = currentUser)
+    invoice_ID  = info.business_ID
     customers   = Customer.objects.filter(business_ID = info.business_ID)
     inbox_messages = customers.filter(inbox_messages__gt = 0).count()
     all_bookings =  EventBooking.objects.filter(business_ID = info.business_ID)
@@ -852,6 +874,7 @@ def eventsBookings(request):
    
         
     context    = {
+        "invoice_ID":invoice_ID,
         "businessInfo":businessInfo,
         "current_time":current_time,
         "totalBookings":totalBookings,
@@ -875,6 +898,7 @@ def deletebooking(request,booking_ID):
 def createCoupon(request):
     currentUser    = request.user
     info           = UserProfile.objects.get(user = currentUser)
+    invoice_ID  = info.business_ID
     all_category   = ProductCategory.objects.filter(business_ID = info.business_ID,)
     customers      = Customer.objects.filter(business_ID = info.business_ID)
     inbox_messages = customers.filter(inbox_messages__gt = 0).count()
@@ -950,7 +974,7 @@ def createCoupon(request):
                     return render(request,'app/createCoupon.html',context)       
             except Exception as exp:
                 print(exp)
-    context        = {"businessInfo":businessInfo,'current_page':current_page,'current_time':current_time,'total_coupons':total_coupons,'all_coupons':all_coupons,'all_category':all_category,"inbox_messages":inbox_messages,}
+    context        = {"invoice_ID":invoice_ID,"businessInfo":businessInfo,'current_page':current_page,'current_time':current_time,'total_coupons':total_coupons,'all_coupons':all_coupons,'all_category':all_category,"inbox_messages":inbox_messages,}
    
     return render(request,'app/createCoupon.html',context)
 
@@ -960,9 +984,11 @@ def createCoupon(request):
 def claimed_coupon(request):
     currentUser    = request.user
     info           = UserProfile.objects.get(user = currentUser)
+    invoice_ID     = info.business_ID
     businessInfo = BusinessProfile.objects.get(business_ID = info.business_ID)
     claimed_coupon = CouponClaim.objects.filter(business_ID = info.business_ID)
     context = {
+        "invoice_ID":invoice_ID,
         'info':info,
         'businessInfo':businessInfo,
         'claimed_coupon':claimed_coupon,
@@ -1014,8 +1040,9 @@ def deletecoupon(request,couponCode):
 def publishArticle(request):
     current_user = request.user
     profile      = UserProfile.objects.get(user = current_user)
+    invoice_ID     = profile.business_ID
     businessInfo = BusinessProfile.objects.get(business_ID = profile.business_ID)
-    context      = {'businessInfo':businessInfo}
+    context      = {"invoice_ID":invoice_ID,'businessInfo':businessInfo}
     return render(request,'app/index.html',context)
 
 
@@ -1025,6 +1052,7 @@ def publishArticle(request):
 def allArticles(request):
     current_user = request.user
     profile      = UserProfile.objects.get(user = current_user)
+    invoice_ID     = profile.business_ID
     businessInfo = BusinessProfile.objects.get(business_ID = profile.business_ID)
     context      = {'businessInfo':businessInfo}
     return render(request,'app/index.html',context)
@@ -1035,6 +1063,7 @@ def allArticles(request):
 def my_settings(request):
     current_user = request.user
     profile      = UserProfile.objects.get(user = current_user)
+    invoice_ID     = profile.business_ID
     businessInfo = BusinessProfile.objects.get(business_ID = profile.business_ID)
     if request.method == "POST":
         try:
@@ -1092,6 +1121,7 @@ def my_settings(request):
 def store_manager(request):
     current_user = request.user
     profile      = UserProfile.objects.get(user = current_user)
+    invoice_ID     = profile.business_ID
     businessInfo = BusinessProfile.objects.get(business_ID = profile.business_ID)
     if request.method == "POST":
         try:
@@ -1129,7 +1159,7 @@ def store_manager(request):
             
         except Exception as exp:
             print(exp)
-    context      = {'businessInfo':businessInfo}
+    context      = {"invoice_ID":invoice_ID,'businessInfo':businessInfo}
     return render(request,'app/branch-manager.html',context )
 
 
@@ -1140,9 +1170,10 @@ def all_stores(request):
     all_plan     = Plan.objects.all()
     current_user = request.user
     profile      = UserProfile.objects.get(user = current_user)
+    invoice_ID     = profile.business_ID
     businessInfo = BusinessProfile.objects.get(business_ID = profile.business_ID)
     stores       = BusinessBranch.objects.filter(business_ID = profile.business_ID)
-    context      = {'businessInfo':businessInfo,'stores':stores}
+    context      = {"invoice_ID":invoice_ID,'businessInfo':businessInfo,'stores':stores}
     return render(request,'app/all-stores.html',context)
 
 
@@ -1154,6 +1185,7 @@ def billing_plan(request):
     all_plan     = Plan.objects.all()
     current_user = request.user
     profile      = UserProfile.objects.get(user = current_user)
+    invoice_ID     = profile.business_ID
     businessInfo = BusinessProfile.objects.get(business_ID = profile.business_ID)
     current_plan = Plan.objects.get(Plan_ID = businessInfo.Plan_ID)
     packages     = PlanPackage.objects.all()
@@ -1166,12 +1198,13 @@ def billing_invoices(request):
     current_time  = datetime.datetime.now()
     current_user = request.user
     profile      = UserProfile.objects.get(user = current_user)
+    invoice_ID     = profile.business_ID
     businessInfo = BusinessProfile.objects.get(business_ID = profile.business_ID)
     current_plan = Plan.objects.get(Plan_ID = businessInfo.Plan_ID)
     invoice_info  = BillingInvoice.objects.filter(business_ID = profile.business_ID)
     all_invoice  = BillingInvoice.objects.filter(business_ID = profile.business_ID).first()
     invoice_ID = all_invoice.Invoice_ID
-    context      = {"invoice_info":invoice_info,"invoice_ID":invoice_ID,'current_time': current_time,'all_invoice':all_invoice,'businessInfo':businessInfo,'current_plan':current_plan}
+    context      = {"invoice_ID":invoice_ID,"invoice_info":invoice_info,"invoice_ID":invoice_ID,'current_time': current_time,'all_invoice':all_invoice,'businessInfo':businessInfo,'current_plan':current_plan}
     return render(request,'app/billing.html',context)
 
 @login_required(login_url='accounts/login' )
@@ -1179,10 +1212,11 @@ def billing_invoices(request):
 def invoices_detail(request,invoice_ID):
     current_user = request.user
     profile      = UserProfile.objects.get(user = current_user)
+    invoice_ID     = profile.business_ID
     businessInfo = BusinessProfile.objects.get(business_ID = profile.business_ID)
     current_plan = Plan.objects.get(Plan_ID = businessInfo.Plan_ID)
-    all_invoice  = BillingInvoice.objects.get(Invoice_ID = invoice_ID)
-    context      = {'all_invoice':all_invoice,'businessInfo':businessInfo,'current_plan':current_plan}
+    all_invoice  = BillingInvoice.objects.get(business_ID = invoice_ID)
+    context      = {"invoice_ID":invoice_ID,'all_invoice':all_invoice,'businessInfo':businessInfo,'current_plan':current_plan}
     return render(request,'app/invoice/invoice.html',context)
 
 
@@ -1191,9 +1225,10 @@ def invoices_detail(request,invoice_ID):
 def payment_page(request,Invoice_ID):
     current_user = request.user
     profile      = UserProfile.objects.get(user = current_user)
+    invoice_ID     = profile.business_ID
     businessInfo = BusinessProfile.objects.get(business_ID = profile.business_ID)
     all_invoice  = BillingInvoice.objects.get(Invoice_ID = Invoice_ID)
-    context      = {'all_invoice':all_invoice}
+    context      = {"invoice_ID":invoice_ID,'all_invoice':all_invoice}
     return render(request,'app/pay.html',context)
 
 
@@ -1205,6 +1240,7 @@ def account_upgrade(request,plan_ID):
     all_plan     = Plan.objects.all()
     current_user = request.user
     profile      = UserProfile.objects.get(user = current_user)
+    invoice_ID     = profile.business_ID
     businessInfo = BusinessProfile.objects.get(business_ID = profile.business_ID)
     current_plan = Plan.objects.get(Plan_ID = businessInfo.Plan_ID)
     planupdate   = Plan.objects.get(Plan_ID = plan_ID)
@@ -1239,8 +1275,9 @@ def account_upgrade(request,plan_ID):
 def diskspace(request):
     current_user = request.user
     profile      = UserProfile.objects.get(user = current_user)
+    invoice_ID     = profile.business_ID
     businessInfo = BusinessProfile.objects.get(business_ID = profile.business_ID)
-    context = {"businessInfo":businessInfo}
+    context = {"invoice_ID":invoice_ID,"businessInfo":businessInfo}
     return render(request,'app/storage-disk.html',context)
 
 
@@ -1249,10 +1286,11 @@ def diskspace(request):
 def PaymentView(request,Invoice_ID):
     current_user = request.user
     profile      = UserProfile.objects.get(user = current_user)
+    invoice_ID     = profile.business_ID
     businessInfo = BusinessProfile.objects.get(business_ID = profile.business_ID)
     current_plan = Plan.objects.get(Plan_ID = businessInfo.Plan_ID)
     all_invoice  = BillingInvoice.objects.get(Invoice_ID = Invoice_ID)
-    context = {'Invoice_ID':Invoice_ID}
+    context = {"invoice_ID":invoice_ID,'Invoice_ID':Invoice_ID}
 
     if request.method == "POST":
         AccountNumber   = request.POST.get('AccountNumber','')
@@ -1333,7 +1371,7 @@ def user_profile(request):
     
         messages.success(request, "You have succesfully updated your profile.")
     userprofile = UserProfile.objects.get(user = currentUser)
-    context = {"userprofile": userprofile}
+    context = {"invoice_ID":invoice_ID,"userprofile": userprofile}
     return render(request,'app/default/User-profile.html',context)
 
 
@@ -1346,6 +1384,7 @@ def user_profile(request):
 def knoledge_center(request):
     currentUser = request.user
     info        = UserProfile.objects.get(user = currentUser)
+    invoice_ID     = info.business_ID
     businessInfo = BusinessProfile.objects.get(business_ID =  info.business_ID)
     customers   = Customer.objects.filter(business_ID = info.business_ID)
    
@@ -1382,7 +1421,7 @@ def knoledge_center(request):
         else:
             messages.error(request, 'File format not supported!')
    
-    context = {"businessInfo":businessInfo,"inbox_messages":inbox_messages,}
+    context = {"invoice_ID":invoice_ID,"businessInfo":businessInfo,"inbox_messages":inbox_messages,}
     return render(request,'app/knowledge-base.html',context)
 
 
@@ -1393,9 +1432,10 @@ def knoledge_center(request):
 def all_articles(request):
     currentUser = request.user
     info        = UserProfile.objects.get(user = currentUser)
+    invoice_ID     = info.business_ID
     businessInfo = BusinessProfile.objects.get(business_ID =  info.business_ID)
     all_knoledge = KnoledgeBase.objects.filter(business_ID = info.business_ID)
-    context = {"businessInfo":businessInfo,"all_knoledge":all_knoledge}
+    context = {"invoice_ID":invoice_ID,"businessInfo":businessInfo,"all_knoledge":all_knoledge}
     return render(request,'app/all-articles.html',context)
 
 

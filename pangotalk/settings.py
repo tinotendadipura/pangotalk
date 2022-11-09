@@ -151,22 +151,22 @@ USE_TZ = True
 
 #  Production
 
-# STATIC_URL = '/static/'
-# STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
-# MEDIA_URL = '/media/'
-# MEDIA_ROOT=os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+MEDIA_ROOT=os.path.join(BASE_DIR, 'media')
 
 
 # DEVELOPMENT
 
-STATIC_URL = '/static/'
-MEDIA_URL = '/media/'
-MEDIA_ROOT=os.path.join(BASE_DIR, 'media')
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
+# STATIC_URL = '/static/'
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT=os.path.join(BASE_DIR, 'media')
+# STATICFILES_DIRS = (
+#     os.path.join(BASE_DIR, 'static'),
 
-)
+# )
 
 
 # CELERY SETTINGS

@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'send_mail_app',
     'billing',
      'django_ses',
+     'django_inlinecss',
     
 ]
 

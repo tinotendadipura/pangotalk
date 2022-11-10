@@ -968,6 +968,7 @@ def createCoupon(request):
                         
                         
                     messages.success(request, 'Your Coupons were successifully created')
+                    return redirect('promo/customer-coupons')
                     
                 else:
                     messages.error(request, 'Form was not completely filled, re-submit the form!')

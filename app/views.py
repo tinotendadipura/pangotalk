@@ -1759,7 +1759,7 @@ def business_category(request):
         
         curentUser = request.user
         curentUser = request.user
-        if request.POST['website'] and ['facebook'] and ['business_category']:
+        if request.POST['business_category']:
             BusinessProfile.objects.filter(user =  curentUser).update(
                 facebook              =  facebook,
                 website               =  website,

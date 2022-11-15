@@ -44,7 +44,7 @@ def schedule_billing(next_billing_date,business_ID):
     
         PeriodicTask.objects.filter(name = business_ID).delete()
      schedule, created = CrontabSchedule.objects.get_or_create(hour = 1,minute = 34)
-     PeriodicTask.objects.create(crontab=schedule, name=, task='send_mail_app.tasks.send_mail_func',, args = json.dumps([1]))
+     PeriodicTask.objects.create(crontab=schedule, name=business_ID, task='send_mail_app.tasks.send_mail_func', args = json.dumps([1]))
     
 
      return HttpResponse("Done")

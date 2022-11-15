@@ -21,6 +21,7 @@ from django.template.loader import get_template
 from app.views import business_category
 #from kangaroo.settings import EMAIL_HOST_USER
 from pangotalk.settings import EMAIL_HOST
+from send_mail_app .emailmanager import PaymentEmail
 from send_mail_app.tasks import send_mail_func ,payment_success_mail_func,billing_reminder_func
 from  app. decorators import (
     user_controller
@@ -578,7 +579,8 @@ def send_billing_invoice(request,invoice_id):
     billing_counter  = billing_counter + 1
     BillingInvoice.objects.filter(Invoice_ID = invoice_id).update(reminder = billing_counter )
     business_ID = billingInfo.business_ID
-    billing_reminder_func.delay(business_ID,invoice_id)
+    sendreminder = PaymentEmail()
+    sendreminder.send_billing_reminder(business_ID,invoice_id)
     return redirect('manager/overdue/payments')
 
 

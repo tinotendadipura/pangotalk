@@ -211,6 +211,6 @@ AWS_DEFAULT_ACL = None
 # DEFAULT_FROM_EMAIL   = 'PangoTalk<taita.edu@gmail.com>'
 # EMAIL_USE_TLS  = True
 # EMAIL_USE_SSL   = False
-    
+#    
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 

@@ -207,7 +207,6 @@ EMAIL_HOST_USER  = 'info@pangotalk.com'
 EMAIL_HOST_PASSWORD  = '@shinobi97'
 APPLICATION_EMAIL    = 'PangoTalk<info@pangotalk.com>'
 DEFAULT_FROM_EMAIL   = 'PangoTalk<info@pangotalk.com>'
-EMAIL_USE_TLS  = True
 EMAIL_USE_SSL   = True
 #    
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'

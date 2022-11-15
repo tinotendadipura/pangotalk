@@ -8,11 +8,20 @@ ContactCard,ProductListingImages,Visitors,Invite,InvoiceGenerator
 Event,KnoledgeBase,ProductCategory,CountryCodes,Coupon,
 CouponClaim, MediaType,PlanPackage,Testimonial,
 ProductFeature,UseCase,Integration,DiskManager,OrderNotification,AccountUpgrade,
-BusinessConfiguration,Transaction,OrderGroup,BannerImage,Feedback,FeedbackCount)
+BusinessConfiguration,Transaction,OrderGroup,BannerImage,Feedback,FeedbackCount,CustomerEmails)
 
 
 
+class CustomerEmailsAdmin(admin.ModelAdmin):
+    list_display = ( 
 
+    'email',
+    'date',
+       
+    )
+list_per_page = 10
+    
+admin.site.register(CustomerEmails ,CustomerEmailsAdmin)
 
 
 

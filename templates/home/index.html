@@ -30,7 +30,8 @@
 								</p> 
 
 								<!-- HERO QUICK FORM -->
-								<form name="quickform" class="quick-form shadow-form" action="{% url 'account/user/signup' %}" method="get">
+								<form name="quickform" class="quick-form shadow-form"  method="POST">
+								{% csrf_token %}
 
 									<!-- Form Inputs -->	
 									<div class="input-group">
@@ -40,8 +41,7 @@
 										</span>										
 									</div>	
 
-									<!-- Form Message -->
-									<div class="quick-form-msg"><span class="loading"></span></div>	
+									
 									
 								</form>			
 

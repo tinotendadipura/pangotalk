@@ -733,3 +733,11 @@ class Integration(models.Model):
     CompanyName               = models.CharField(default ='' ,max_length=500)
     companyLogo               = models.FileField(upload_to='files/%Y/%m/%d/',null=True,blank=True)
     description               = models.TextField(default ='None' ,max_length=500)
+
+
+
+
+class CustomerEmails(models.Model):
+    email       = models.CharField(default ='' ,max_length=500)
+    date        = models.DateTimeField(default = timezone.now)
+    

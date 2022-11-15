@@ -58,7 +58,8 @@ from . models import (UserProfile,
      CouponClaim,
      OrderGroup,
      Feedback,
-     FeedbackCount
+     FeedbackCount,
+     CustomerEmails
 
     )
 import os
@@ -1520,6 +1521,12 @@ def manage_payment_options(request):
 def index(request):
     all_testimonies = Testimonial.objects.all()
     context         = {"all_testimonies":all_testimonies}
+    if request.method == "POST":
+        email     = request.POST.get('email','')
+        CustomerEmails.objects.create(
+            email = email
+        )
+        return redirect('account/user/signup')
     return render(request,'home/index.html',context)
 
 

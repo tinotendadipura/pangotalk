@@ -191,23 +191,23 @@ CRISPY_TEMPLATE_PACK='bootstrap4'
 
    
 
-# EMAIL_BACKEND = 'django_ses.SESBackend'
-# EMAIL_HOST = 'email-smtp.us-east-1.amazonaws.com'
-# EMAIL_PORT     = '465'
-# AWS_ACCESS_KEY_ID = 'AKIA4S6RBKLVOTF5JZ77'
-# AWS_SECRET_ACCESS_KEY = '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'
-# DEFAULT_FROM_EMAIL   = 'Accounts<account@pangotalk.com>'
-# APPLICATION_EMAIL    = 'Accounts<account@pangotalk.com>'
-# AWS_DEFAULT_ACL = None
+EMAIL_BACKEND = 'django_ses.SESBackend'
+EMAIL_HOST = 'email-smtp.us-east-1.amazonaws.com'
+EMAIL_PORT     = '465'
+AWS_ACCESS_KEY_ID = 'AKIA4S6RBKLVOTF5JZ77'
+AWS_SECRET_ACCESS_KEY = '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'
+DEFAULT_FROM_EMAIL   = 'Accounts<account@pangotalk.com>'
+APPLICATION_EMAIL    = 'Accounts<account@pangotalk.com>'
+AWS_DEFAULT_ACL = None
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST    = 'smtp.zoho.com'
-EMAIL_PORT     = '587'
-EMAIL_HOST_USER  =     'info@pangotalk.com'
-EMAIL_HOST_PASSWORD  = '@Shinobi97'
-APPLICATION_EMAIL    = 'PangoTalk<info@pangotalk.com>'
-DEFAULT_FROM_EMAIL   = 'PangoTalk<info@pangotalk.com>'
-EMAIL_USE_TLS  = True
-#    
-DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST    = 'smtp.zoho.com'
+# EMAIL_PORT     = '587'
+# EMAIL_HOST_USER  =     'info@pangotalk.com'
+# EMAIL_HOST_PASSWORD  = '@Shinobi97'
+# APPLICATION_EMAIL    = 'PangoTalk<info@pangotalk.com>'
+# DEFAULT_FROM_EMAIL   = 'PangoTalk<info@pangotalk.com>'
+# EMAIL_USE_TLS  = True
+# #    
+# DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 

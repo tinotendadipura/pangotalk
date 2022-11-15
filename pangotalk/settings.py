@@ -171,7 +171,6 @@ MEDIA_ROOT=os.path.join(BASE_DIR, 'media')
 
 
 # CELERY SETTINGS
-
 CELERY_broker_url = 'redis://127.0.0.1:6379'
 accept_content = ['application/json']
 result_serializer = 'json'

@@ -584,6 +584,7 @@ def send_billing_invoice(request,invoice_id):
     return redirect('manager/overdue/payments')
 
 
+
 @login_required(login_url='accounts/login' )
 @allowed_users(allowed_roles = ['Adminstrator'])
 def transaction_history(request):
